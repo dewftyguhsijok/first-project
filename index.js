@@ -1,19 +1,21 @@
-function LRUCache(capacity) {
-  this.capacity = capacity;
-  this.cache = new Map();
-}
-LRUCache.prototype.get = function (key) {
-  if (!this.cache.has(key)) return -1;
-  const value = this.cache.get(key);
-  this.cache.delete(key);
-  this.cache.set(key, value);
-  return value;
-};
-LRUCache.prototype.put = function (key, value) {
-  if (this.cache.has(key)) this.cache.delete(key);
-  if (this.cache.size === this.capacity) {
-    const firstKey = this.cache.keys().next().value;
-    this.cache.delete(firstKey);
+function permuteUnique(nums) {
+  const result = [];
+  nums.sort((a, b) => a - b);
+  backtrack([], new Array(nums.length).fill(false));
+  return result;
+  function backtrack(current, used) {
+    if (current.length === nums.length) {
+      result.push([...current]);
+      return;
+    }
+    for (let i = 0; i < nums.length; i++) {
+      if (used[i] || (i > 0 && nums[i] === nums[i - 1] && !used[i - 1]))
+        continue;
+      current.push(nums[i]);
+      used[i] = true;
+      backtrack(current, used);
+      current.pop();
+      used[i] = false;
+    }
   }
-  this.cache.set(key, value);
-};
+}
